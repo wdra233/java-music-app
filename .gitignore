@@ -1,5 +1,7 @@
 # Compiled class file
 *.class
+java-music-app.iml
+.idea
 
 # Log file
 *.log
