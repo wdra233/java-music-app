@@ -25,6 +25,7 @@ public class G {
         public V(int x, int y) { set(x, y); }
 
         public void set(int x, int y) { this.x = x; this.y = y; }
+        public void set(V v) { set(v.x, v.y); }
 
         public void add(V v) { x += v.x; y += v.y; }
 
@@ -51,12 +52,45 @@ public class G {
     }
 
     public static class LoHi {
+        public int lo, hi;
+        public LoHi(int min, int max) { lo = min; hi = max; }
+        public void set(int val) { lo = val; hi = val; }
+        public void add(int val) { if(val < lo) { lo = val; } if(val > hi) { hi = val; } }
+        public int size() {
+            if (hi <= lo) return 1;
+            return hi - lo;
+        }
     }
 
+    //----------------------------------------------BoundingBox--------------------------------------------------------------//
     public static class BBox {
+        LoHi h, v; // horizontal and vertical ranges
+        public BBox() { h = new LoHi(0, 0); v = new LoHi(0, 0); }
+        public void set(int x, int y) { h.set(x); v.set(y);}
+        public void add(int x, int y) { h.add(x); v.add(y);}
+        public void add(V v) { add(v.x, v.y); }
+        public VS getNewVS() { return new VS(h.lo, v.lo, h.hi - h.lo, v.hi - v.lo); }
+
+        public void draw(Graphics g) { g.drawRect(h.lo, v.lo, h.hi - h.lo, v.hi - v.lo); }
     }
 
+    //-----------------------------------------------Poly-------------------------------------------------------------//
     public static class PL {
+        public V[] points;
+        public PL(int count) {
+            points = new V[count];
+            for(int i = 0; i < count; i++) { points[i] = new V(0, 0); }
+        }
+
+        public int size() { return points.length; }
+
+        public void drawN(Graphics g, int n) {
+            for(int i = 1; i < n; i++) {
+                g.drawLine(points[i-1].x, points[i-1].y, points[i].x, points[i].y);
+            }
+        }
+
+        public void draw(Graphics g) { drawN(g, points.length); }
     }
 
 
