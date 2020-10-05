@@ -7,4 +7,7 @@ public class UC {
     public static final int INK_BUFFER_MAX = 300;
 
     public static final Color INK_COLOR = Color.BLACK;
+
+    public static final int NORM_SAMPLE_SIZE= 25;
+    public static final int NORM_COORD_MAX = 1000;
 }

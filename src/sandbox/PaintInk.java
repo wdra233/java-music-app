@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 public class PaintInk extends Window {
     public static Ink.List inkList = new Ink.List();
 
-    static { inkList.add(new Ink()); }
-
     public PaintInk() {
         super("PaintInk", UC.WINDOW_WIDTH, UC.WINDOW_HEIGHT);
     }
