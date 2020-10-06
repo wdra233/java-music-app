@@ -1,11 +1,13 @@
-package music;
+package reaction;
 
 import graphicsLib.G;
+import music.I;
+import music.UC;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Ink implements I.Show{
+public class Ink implements I.Show {
     public static Buffer BUFFER = new Buffer();
     public static final int K = UC.NORM_SAMPLE_SIZE;
     public Norm norm;
@@ -39,6 +41,21 @@ public class Ink implements I.Show{
             G.V.T.set(normBox, vs);
             for(int i = 1; i < K; i++) {
                 g.drawLine(points[i - 1].tx(), points[i - 1].ty(), points[i].tx(), points[i].ty());
+            }
+        }
+
+        public int dist(Norm norm) {
+            int result = 0;
+            for(int i = 0; i < K; i++) {
+                int dx = points[i].x - norm.points[i].x, dy = points[i].y- norm.points[i].y;
+                result += dx * dx + dy * dy;
+            }
+            return  result;
+        }
+
+        public void blend(Norm norm, int nBlend) {
+            for(int i = 0; i < K; i++) {
+                points[i].blend(norm.points[i], nBlend);
             }
         }
 
