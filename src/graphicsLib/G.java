@@ -1,6 +1,7 @@
 package graphicsLib;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Random;
 
 public class G {
@@ -19,7 +20,7 @@ public class G {
         g.fillRect(0, 0, 5000, 5000);
     }
 
-    public static class V {//vector----------------------------------------------
+    public static class V implements Serializable {//vector----------------------------------------------
         public int x, y;
         public static Transform T = new Transform();
 
@@ -114,7 +115,7 @@ public class G {
     }
 
     //-----------------------------------------------Poly-------------------------------------------------------------//
-    public static class PL {
+    public static class PL implements Serializable {
         public V[] points;
         public PL(int count) {
             points = new V[count];
