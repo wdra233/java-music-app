@@ -38,6 +38,14 @@ public class Ink implements I.Show {
             G.V.T.set(BUFFER.bbox, normBox);
             transform();
         }
+
+        public Norm(Ink.Norm norm) {
+            super(K);
+            for(int i = 0; i < K; i++) {
+                points[i].set(norm.points[i]);
+            }
+        }
+
         public void drawAt(Graphics g, G.VS vs) {
             G.V.T.set(normBox, vs);
             for(int i = 1; i < K; i++) {
