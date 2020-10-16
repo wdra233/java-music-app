@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 public class PaintInk extends Window {
     public static Ink.List inkList = new Ink.List();
     public static Shape.Prototype.List pList = new Shape.Prototype.List();
+    public static String recognized = "";
 
     public PaintInk() {
         super("PaintInk", UC.WINDOW_WIDTH, UC.WINDOW_HEIGHT);
@@ -29,6 +30,7 @@ public class PaintInk extends Window {
            g.drawString("Dist: " + dist, 600, 60);
         }
         pList.show(g);
+        g.drawString(recognized, 700, 40);
     }
 
     @Override
@@ -40,6 +42,8 @@ public class PaintInk extends Window {
     @Override
     public void mouseReleased(MouseEvent me) {
         Ink ink = new Ink();
+        Shape s = Shape.recognize(ink);
+        recognized = "Recognized, " + ((s != null) ? s.name :  "unrecognized");
         Shape.Prototype proto;
         inkList.add(ink);
         if (pList.bestDist(ink.norm) < UC.NO_MATCH_DIST) {

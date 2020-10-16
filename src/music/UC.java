@@ -18,4 +18,5 @@ public class UC {
     public static final int DOT_THRESHOLD = 5;
 
     public static final Color SHAPE_TRAINER_BACKGROUND_COLOR = new Color(204, 255, 204);
+    public static final int NO_BID = 10000;
 }
