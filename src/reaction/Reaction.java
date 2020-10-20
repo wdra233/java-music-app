@@ -23,6 +23,11 @@ public abstract class Reaction implements I.React {
         return byShape.getList(g.shape).lowBid(g);
     }
 
+    public static void nuke() {
+        byShape = new Map();
+        initialReaction.enable();
+    }
+
     // make sure the reaction is in the list
     public void enable() {
         List list = byShape.getList(shape);
@@ -55,6 +60,8 @@ public abstract class Reaction implements I.React {
             }
             return res;
         }
+
+        public void enable() { for (Reaction r : this) { r.enable(); } }
 
     }
 
