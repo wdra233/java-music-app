@@ -93,7 +93,9 @@ public class Ink implements I.Show {
         public void clear() { n = 0; }
 
         @Override
-        public void show(Graphics g) { drawN(g, n); bbox.draw(g); }
+        public void show(Graphics g) { drawN(g, n);
+//        bbox.draw(g);
+        }
 
         @Override
         public boolean hit(int x, int y) { return true; }

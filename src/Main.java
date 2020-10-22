@@ -1,5 +1,6 @@
 import graphicsLib.Window;
 import reaction.ShapeTrainerApp;
+import sandbox.MusicOne;
 import sandbox.PaintInk;
 import sandbox.ReactionTest;
 
@@ -9,7 +10,9 @@ public class Main {
 //        Window.PANEL = new Squares();
 //        Window.PANEL = new PaintInk();
 //        Window.PANEL = new ShapeTrainerApp();
-        Window.PANEL = new ReactionTest();
+//        Window.PANEL = new ReactionTest();
+        Window.PANEL = new MusicOne();
         Window.launch();
+
     }
 }
