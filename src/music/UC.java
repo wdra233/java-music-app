@@ -19,4 +19,6 @@ public class UC {
 
     public static final Color SHAPE_TRAINER_BACKGROUND_COLOR = new Color(204, 255, 204);
     public static final int NO_BID = 10000;
+
+    public static final int BAR_TO_MARGIN_SNAP = 30;
 }
