@@ -2,6 +2,7 @@ package sandbox;
 
 import graphicsLib.G;
 import graphicsLib.Window;
+import music.Glyph;
 import music.Page;
 import music.UC;
 import reaction.Gesture;
@@ -32,6 +33,10 @@ public class MusicOne extends Window {
         Layer.ALL.show(g);
         g.setColor(Color.BLACK);
         Ink.BUFFER.show(g);
+        if (Page.PAGE != null) {
+            Glyph.CLEF_G.showAt(g, 8, Page.PAGE.xMargin.lo, Page.PAGE.yMargin.lo + 4 * 8);
+            Glyph.HEAD_HALF.showAt(g,  8, 200,  Page.PAGE.yMargin.lo + 4 * 8);
+        }
     }
 
     @Override

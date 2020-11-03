@@ -12,6 +12,7 @@ public class Staff extends Mass {
     public Sys sys;
     public int iStaff;
     public Staff.FMT fmt;
+    public Clef initialClef;
 
     public Staff(Sys sys, int iStaff) {
         super("BACK");
@@ -36,6 +37,56 @@ public class Staff extends Mass {
                 new Bar(Staff.this.sys, x);
             }
         });
+
+        addReaction(new Reaction("S-S") { // toggle bar continues
+            @Override
+            public int bid(Gesture g) {
+                if (Staff.this.sys.iSys != 0) { return UC.NO_BID; }
+                int y1 = g.vs.yL(), y2 = g.vs.yH(), iStaff = Staff.this.iStaff;
+                if (iStaff == Page.PAGE.sysFmt.size() - 1) {
+                    return UC.NO_BID;
+                }
+                if (Math.abs(y1 - Staff.this.yBot()) > 20) { return UC.NO_BID; }
+                Staff nextStaff = Staff.this.sys.staffs.get(iStaff + 1);
+                if (Math.abs(y2 - nextStaff.yTop()) > 20) { return UC.NO_BID; }
+                return 10;
+            }
+
+            @Override
+            public void act(Gesture g) {
+                Page.PAGE.sysFmt.get(Staff.this.iStaff).toggleBarContinues();
+            }
+        });
+
+        addReaction(new Reaction("SE-SW") { // F Clef
+            public int bid(Gesture g) {
+                int x = g.vs.xM(), y1 = g.vs.yL(), y2 = g.vs.yH();
+                G.LoHi m = Page.PAGE.xMargin;
+                if(x < m.lo || x > m.hi) { return UC.NO_BID; }
+                int d = Math.abs(y1 - Staff.this.yTop()) + Math.abs(y2 - Staff.this.yBot());
+                if (d > 50) { return UC.NO_BID; }
+                else { return d; }
+            }
+
+            public void act(Gesture g) {
+                initialClef = Clef.F;
+            }
+        });
+
+        addReaction(new Reaction("SW-SE") { // F Clef
+            public int bid(Gesture g) {
+                int x = g.vs.xM(), y1 = g.vs.yL(), y2 = g.vs.yH();
+                G.LoHi m = Page.PAGE.xMargin;
+                if(x < m.lo || x > m.hi) { return UC.NO_BID; }
+                int d = Math.abs(y1 - Staff.this.yTop()) + Math.abs(y2 - Staff.this.yBot());
+                if (d > 50) { return UC.NO_BID; }
+                else { return d; }
+            }
+
+            public void act(Gesture g) {
+                initialClef = Clef.G;
+            }
+        });
     }
 
     public int sysOff() { return sys.page.sysFmt.staffOffsets.get(iStaff); }
@@ -43,6 +94,11 @@ public class Staff extends Mass {
     public int yTop() { return sys.yTop() + sysOff(); }
 
     public int yBot() { return yTop() + fmt.height(); }
+
+    public void show(Graphics g) {
+        g.setColor(Color.BLUE);
+        if (initialClef != null) initialClef.showAt(g, Page.PAGE.xMargin.lo + 3 * fmt.H, yTop(), fmt.H);
+    }
 
     // --- Staff Format
     public static class FMT {
