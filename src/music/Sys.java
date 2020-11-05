@@ -10,12 +10,16 @@ public class Sys extends Mass {
     public ArrayList<Staff> staffs = new ArrayList<>();
     public Page page;
     public int iSys;
+    public Time.List times;
 
     public Sys(Page page, int iSys) {
         super("BACK");
         this.page = page;
         this.iSys = iSys;
+        times = new Time.List(this);
     }
+
+    public Time getTime(int x) { return times.getTime(x); }
 
     public int yTop() { return page.sysTop(iSys); }
 

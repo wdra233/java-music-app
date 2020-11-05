@@ -87,6 +87,55 @@ public class Staff extends Mass {
                 initialClef = Clef.G;
             }
         });
+
+        addReaction(new Reaction("SW-SW") { // adding a note head
+
+            public int bid(Gesture g) {
+                int x = g.vs.xM(), y = g.vs.yM();
+                if (x < Page.PAGE.xMargin.lo || x > Page.PAGE.xMargin.hi) { return UC.NO_BID; }
+                int h = Staff.this.H(), top = Staff.this.yTop() - h, bot = Staff.this.yBot() + h;
+                if(y < top || y > bot) { return UC.NO_BID; }
+                return 10;
+            }
+
+            public void act(Gesture g) {
+                new Head(Staff.this, g.vs.xM(), g.vs.yM());
+            }
+        });
+
+        addReaction(new Reaction("W-S") { // add quarter rest
+            public int bid(Gesture g) {
+                int x = g.vs.xL(), y = g.vs.yM();
+                if(x < Page.PAGE.xMargin.lo || x > Page.PAGE.xMargin.hi) { return UC.NO_BID; }
+                int h = Staff.this.H(), top = Staff.this.yTop() - h, bot = Staff.this.yBot() + h;
+                if(y < top || y > bot) { return UC.NO_BID; }
+                return 10;
+            }
+
+            public void act(Gesture g) {
+                Time t = Staff.this.sys.getTime(g.vs.xL());
+                new Rest(Staff.this, t);
+            }
+        });
+
+        addReaction(new Reaction("E-S") { // add eighth rest
+            public int bid(Gesture g) {
+                int x = g.vs.xL(), y = g.vs.yM();
+                if(x < Page.PAGE.xMargin.lo || x > Page.PAGE.xMargin.hi) { return UC.NO_BID; }
+                int h = Staff.this.H(), top = Staff.this.yTop() - h, bot = Staff.this.yBot() + h;
+                if(y < top || y > bot) { return UC.NO_BID; }
+                return 10;
+            }
+
+            public void act(Gesture g) {
+                Time t = Staff.this.sys.getTime(g.vs.xL());
+                new Rest(Staff.this, t).nFlag = 1;
+
+            }
+        });
+
+
+
     }
 
     public int sysOff() { return sys.page.sysFmt.staffOffsets.get(iStaff); }
@@ -94,6 +143,17 @@ public class Staff extends Mass {
     public int yTop() { return sys.yTop() + sysOff(); }
 
     public int yBot() { return yTop() + fmt.height(); }
+
+    public int H() { return fmt.H; }
+
+    public int yLine(int line) { return yTop() + line * H(); }
+
+    public int lineOfY(int y) {
+        int h = H();
+        int BIAS = 100;
+        int top = yTop() - h * BIAS;
+        return ( y - top + h / 2 ) / h - BIAS;
+    }
 
     public void show(Graphics g) {
         g.setColor(Color.BLUE);
