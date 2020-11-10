@@ -23,4 +23,8 @@ public class UC {
     public static final int BAR_TO_MARGIN_SNAP = 30;
 
     public static final int SNAP_TIME = 30;
+
+    public static final int REST_AUG_DOT_OFF_SET = 20;
+
+    public static final int AUG_DOT_SPACING = 10;
 }
