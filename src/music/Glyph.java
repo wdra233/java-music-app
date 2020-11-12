@@ -14,6 +14,7 @@ public class Glyph {
     public static Glyph CLEF_G8 = new Glyph((char)61639, 16, -3, 1);
 
     public static Glyph HEAD_HALF = new Glyph((char)61485, 16, 0, 7);
+    public static Glyph HEAD_WHOLE = new Glyph((char)4, 16, 0, 7);
     public static Glyph HEAD_Q = new Glyph((char)61486, 16, 0, 7);
 
     public static Glyph FLAG1D = new Glyph((char)61487, 16, 0, 8);
@@ -48,7 +49,7 @@ public class Glyph {
         int size = (int)scale*H;
         if(size != theSize){
             theFont = new Font(fontName, 0, size);
-            System.out.println("--------------" + theFont.getFontName() + "----------------");
+//            System.out.println("--------------" + theFont.getFontName() + "----------------");
             theSize = size;
         }
         Font f = g.getFont(); // fetch old font so that we can restore it

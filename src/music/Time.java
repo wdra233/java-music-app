@@ -24,7 +24,9 @@ public class Time {
             int y = h.y();
             if (y > y1 && y < y2) { h.joinStem(s); }
         }
-
+        if(s.heads.size() > 0) {
+            s.setWrongSize();
+        }
     }
 
     //-------------------------subclass list-----------------------------------------

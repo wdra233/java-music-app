@@ -8,7 +8,7 @@ import reaction.Reaction;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Head extends Mass {
+public class Head extends Mass implements Comparable<Head> {
 
     public Staff staff;
     public int line;
@@ -51,11 +51,35 @@ public class Head extends Mass {
                 }
             }
         });
+
+        addReaction(new Reaction("DOT") {
+            @Override
+            public int bid(Gesture g) {
+                int xH = Head.this.x(), yH = Head.this.y(), h = Head.this.staff.H(), w = Head.this.w();
+                int x = g.vs.xM(), y = g.vs.yM();
+                if (x < xH || x > xH + 2 * w || y < yH - h || y > yH + h) return UC.NO_BID;
+                return Math.abs(xH + w - x) + Math.abs(yH - y);
+            }
+
+            @Override
+            public void act(Gesture g) {
+                if (Head.this.stem != null) {
+                    Head.this.stem.cycleDot();
+                }
+            }
+        });
     }
 
     public void show(Graphics g) {
         int h = staff.H();
-        (forcedGlyph != null ? forcedGlyph : normalGlyph()).showAt(g, h, time.x, staff.yTop() + line * h);
+        g.setColor(wrongSide ? Color.RED : Color.BLUE);
+        (forcedGlyph != null ? forcedGlyph : normalGlyph()).showAt(g, h, x(), staff.yTop() + line * h);
+        if (stem != null) {
+            int off = UC.REST_AUG_DOT_OFF_SET, sp = UC.AUG_DOT_SPACING;
+            for(int i = 0; i < stem.nDot; i++) {
+                g.fillOval(time.x + off + i * sp, y() - 3 * h / 2, 2 * h / 3, 2 * h / 3);
+            }
+        }
     }
 
     public void unStem() {
@@ -75,14 +99,30 @@ public class Head extends Mass {
         stem = s;
     }
 
-    public Glyph normalGlyph() { return Glyph.HEAD_Q; } // this is a stub
+    public Glyph normalGlyph() {
+        if (stem == null) { return Glyph.HEAD_Q; }
+        if (stem.nFlag == -1) { return Glyph.HEAD_HALF; }
+        if (stem.nFlag == -2) { return Glyph.HEAD_WHOLE; }
+        return Glyph.HEAD_Q;
+    }
 
     public int y() { return staff.yLine(line); }
-    public int x() { return time.x; } // This is a stub
+    public int x() {
+        int res = time.x;
+        if (wrongSide) {
+            res += (stem != null && stem.isUp) ? w() : -w();
+        }
+        return res;
+    }
     public void deleteMass() { time.heads.remove(this); } // This is a stub
 
     public int w() {
         return 24 * staff.H() / 10;
+    }
+
+    @Override
+    public int compareTo(Head head) {
+        return ( staff.iStaff != head.staff.iStaff ) ? staff.iStaff - head.staff.iStaff : line - head.line;
     }
 
     public static class List extends ArrayList<Head> {

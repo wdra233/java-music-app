@@ -38,13 +38,13 @@ public class MusicOne extends Window {
         g.setColor(Color.BLACK);
         Ink.BUFFER.show(g);
 
-        if (Page.PAGE != null) {
-//            Glyph.CLEF_G.showAt(g, 8, Page.PAGE.xMargin.lo, Page.PAGE.yMargin.lo + 4 * 8);
-            int h = 32;
-            Glyph.HEAD_HALF.showAt(g,  h, 200,  Page.PAGE.yMargin.lo + 4 * h);
-            g.setColor(Color.RED);
-            g.drawRect(200, Page.PAGE.yMargin.lo + 3 * h, 25 * h / 10, 2 * h);
-        }
+//        if (Page.PAGE != null) {
+////            Glyph.CLEF_G.showAt(g, 8, Page.PAGE.xMargin.lo, Page.PAGE.yMargin.lo + 4 * 8);
+//            int h = 32;
+//            Glyph.HEAD_HALF.showAt(g,  h, 200,  Page.PAGE.yMargin.lo + 4 * h);
+//            g.setColor(Color.RED);
+//            g.drawRect(200, Page.PAGE.yMargin.lo + 3 * h, 25 * h / 10, 2 * h);
+//        }
     }
 
     @Override

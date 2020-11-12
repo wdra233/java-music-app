@@ -21,6 +21,11 @@ public abstract class Mass extends Reaction.List implements I.Show {
         layer.remove(this);
     }
 
+
+    public boolean equals(Object o) {
+        return this == o;
+    }
+
     public void show(Graphics g) { }
 
 }
