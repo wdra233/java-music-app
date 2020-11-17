@@ -31,12 +31,20 @@ public class MusicOne extends Window {
         });
     }
 
+    static int[] xPoly = {100, 200, 200, 100};
+    static int[] yPoly = {50, 70, 80, 60};
+    static Polygon poly = new Polygon(xPoly, yPoly, 4);
+
     @Override
     protected void paintComponent(Graphics g) {
         G.fillBackGround(g);
         Layer.ALL.show(g);
         g.setColor(Color.BLACK);
         Ink.BUFFER.show(g);
+
+        g.setColor(Color.ORANGE);
+        g.fillPolygon(poly);
+        poly.ypoints[3]++;
 
 //        if (Page.PAGE != null) {
 ////            Glyph.CLEF_G.showAt(g, 8, Page.PAGE.xMargin.lo, Page.PAGE.yMargin.lo + 4 * 8);
