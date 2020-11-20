@@ -18,17 +18,17 @@ public class Time {
         }
     }
 
-    public void stemHead(Staff staff, boolean up, int y1, int y2) {
-        Stem s = new Stem(staff, up);
-        for (Head h : heads) {
-            int y = h.y();
-            if (y > y1 && y < y2) { h.joinStem(s); }
-        }
-        if (s.heads.size() > 0) {
-            s.setWrongSize();
-        }
-        s.staff.sys.stems.add(s);
-    }
+//    public void stemHead(Staff staff, boolean up, int y1, int y2) {
+//        Stem s = new Stem(staff, up);
+//        for (Head h : heads) {
+//            int y = h.y();
+//            if (y > y1 && y < y2) { h.joinStem(s); }
+//        }
+//        if (s.heads.size() > 0) {
+//            s.setWrongSize();
+//        }
+//        s.staff.sys.stems.add(s);
+//    }
 
     //-------------------------subclass list-----------------------------------------
     public static class List extends ArrayList<Time> {
