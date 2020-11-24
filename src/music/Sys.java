@@ -27,6 +27,7 @@ public class Sys extends Mass {
                 int x1 = g.vs.xL(), y1 = g.vs.yL(), x2 = g.vs.xH(), y2 = g.vs.yH();
                 if(stems.fastReject(y1, y2)) { return UC.NO_BID; }
                 Stem.List tmpStems = stems.allInterceptor(x1, y1, x2, y2);
+                System.out.println("Stem Interception: " + tmpStems.size());
                 if(tmpStems.size() < 2) { return UC.NO_BID; }
                 Beam b = tmpStems.get(0).beam;
                 for(Stem s : tmpStems) { if(s.beam != b) { return UC.NO_BID; } }

@@ -25,7 +25,7 @@ public class Stem extends Duration implements Comparable<Stem> {
             h.stem = this;
         }
         this.heads = heads;
-        staff.sys.stems.add(this);
+        staff.sys.stems.addStem(this);
         setWrongSize();
         addReaction(new Reaction("E-E") { // increment the flags
             @Override
@@ -62,6 +62,7 @@ public class Stem extends Duration implements Comparable<Stem> {
         }
         if(heads.size() == 0) { return null; }
         Beam b = internalStem(staff.sys, time.x, y1, y2);
+        System.out.println("beam" + b);
         Stem res = new Stem(staff, heads, up);
         if (b != null) {
             b.addStem(res);
@@ -70,7 +71,7 @@ public class Stem extends Duration implements Comparable<Stem> {
         return res;
     }
 
-    public static Beam internalStem(Sys sys, int x, int y1, int y2) {
+    public static Beam internalStem(Sys sys, int x, int y1, int y2) { // returns none null if we find bean crossed by line
         for (Stem s : sys.stems) {
             if (s.beam != null && s.x() < x && s.yLo() < y2 && s.yHi() > y1) {
                 int bx = s.beam.first().x(), by = s.beam.first().yBeamEnd();
@@ -93,7 +94,7 @@ public class Stem extends Duration implements Comparable<Stem> {
             if (y < y1 || y > y2) {
                 return UC.NO_BID;
             }
-            return Math.abs(y - (y1 + y2) / 2);
+            return Math.abs(y - (y1 + y2) / 2) + 55; // biased to lose bid to a beam
         }
         return UC.NO_BID;
     }
@@ -102,8 +103,9 @@ public class Stem extends Duration implements Comparable<Stem> {
     public void show(Graphics g) {
         if (nFlag >= -1 && heads.size() > 0) {
             int x = x(), yH = yFirstHead(), yB = yBeamEnd(), h = staff.H();
+            g.setColor(this.beam == null ? Color.BLACK : Color.ORANGE);
             g.drawLine(x, yH, x, yB);
-            if (nFlag > 0) {
+            if (nFlag > 0 && beam == null) {
                 if (nFlag == 1) { (isUp? Glyph.FLAG1D : Glyph.FLAG1U).showAt(g, h, x, yB); }
                 if (nFlag == 2) { (isUp? Glyph.FLAG2D : Glyph.FLAG2U).showAt(g, h, x, yB); }
                 if (nFlag == 3) { (isUp? Glyph.FLAG3D : Glyph.FLAG3U).showAt(g, h, x, yB); }
@@ -118,13 +120,20 @@ public class Stem extends Duration implements Comparable<Stem> {
     public int yFirstHead() { Head h = firstHead(); return h.staff.yLine(h.line); }
     public int x() { Head h = firstHead(); return h.time.x +( isUp ? h.w() : 0 ); }
     public int yBeamEnd() {
+        if(this.beam != null && beam.stems.size() > 1 && beam.first() != this && beam.last() != this) {
+            Stem b = beam.first(), e = beam.last();
+            return Beam.yOfX(x(), b.x(), b.yBeamEnd(), e.x(), e.yBeamEnd());
+        }
         Head h = lastHead();
         int line = h.line;
         line += (isUp ? -7 : 7); // default extension y octave;
         int flagIncrement = nFlag > 2 ? 2 * (nFlag - 2) : 0; // if more than 2 flags, just the end
         line += isUp ? -flagIncrement : flagIncrement;
-        if ((isUp && line > 4) || (!isUp && line < 4)) { line = 4; }
+        if ((isUp && line > 4) || (!isUp && line < 4)) {
+            line = 4;
+        }
         return h.staff.yLine(line);
+
     }
 
     public int yLo() {
@@ -188,6 +197,10 @@ public class Stem extends Duration implements Comparable<Stem> {
             Stem.List res = new Stem.List();
             for(Stem s : this) {
                 int x = s.x(), y = Beam.yOfX(x, x1, y1, x2, y2);
+//                System.out.print("x, y(" + x + ", " + y + ")");
+//                System.out.print("x1, y1(" + x1 + ", " + y1 + ")");
+//                System.out.print("yLo, yHi(" + s.yLo() + ", " + s.yHi() + ")");
+//                System.out.println("x2, y2(" + x2 + ", " + y2 + ")");
                 if (x > x1 && x < x2 && y > s.yLo() && y < s.yHi()) { res.add(s); }
             }
             return res;

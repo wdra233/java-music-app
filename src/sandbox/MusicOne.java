@@ -43,12 +43,12 @@ public class MusicOne extends Window {
         g.setColor(Color.BLACK);
         Ink.BUFFER.show(g);
 
-        g.setColor(Color.ORANGE);
-        int H = 8, x1 = 100, x2 = 200, y1 = 200;
-        Beam.setMasterBeam(x1, y1 + G.rnd(100), x2, y1 + G.rnd(100));
-        Beam.drawBeamStack(g, 0, 2, x1, x2, H);
-        g.setColor(Color.BLUE);
-        Beam.drawBeamStack(g, 2, 4, x1 + 10, x2 - 10, H);
+//        g.setColor(Color.ORANGE);
+//        int H = 8, x1 = 100, x2 = 200, y1 = 200;
+//        Beam.setMasterBeam(x1, y1 + G.rnd(100), x2, y1 + G.rnd(100));
+//        Beam.drawBeamStack(g, 0, 2, x1, x2, H);
+//        g.setColor(Color.BLUE);
+//        Beam.drawBeamStack(g, 2, 4, x1 + 10, x2 - 10, H);
 //        g.fillPolygon(Beam.poly);
 
 //        if (Page.PAGE != null) {

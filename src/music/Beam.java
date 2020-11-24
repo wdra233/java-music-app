@@ -9,8 +9,8 @@ public class Beam extends Mass {
 
     public Beam(Stem firstStem, Stem lastStem) {
         super("NOTE");
-        stems.add(firstStem);
-        stems.add(lastStem);
+        addStem(firstStem);
+        addStem(lastStem);
     }
 
     public Stem first() {
