@@ -2,6 +2,7 @@ package music;
 
 import graphicsLib.G;
 import reaction.Gesture;
+import reaction.Layer;
 import reaction.Mass;
 import reaction.Reaction;
 
@@ -69,11 +70,29 @@ public class Head extends Mass implements Comparable<Head> {
                 }
             }
         });
+
+        addReaction(new Reaction("S-N") { // To delete a head
+            @Override
+            public int bid(Gesture g) {
+                int w2 = Head.this.w() / 2, h = Head.this.staff.H();
+                int x = g.vs.xM(), xH = x() + w2, dx = Math.abs(x - xH);
+                if (dx > 3 * w2) { return UC.NO_BID; }
+                int y = g.vs.yL(), yH = y(), dy = Math.abs(y - yH);
+                if (dy > 3 * h) { return UC.NO_BID; }
+                return dx + dy;
+
+            }
+
+            @Override
+            public void act(Gesture g) {
+                Head.this.deleteHead();
+            }
+        });
     }
 
     public void show(Graphics g) {
         int h = staff.H();
-        g.setColor(wrongSide ? Color.RED : Color.BLUE);
+        g.setColor(stem == null ? Color.GRAY : Color.BLACK);
         (forcedGlyph != null ? forcedGlyph : normalGlyph()).showAt(g, h, x(), staff.yTop() + line * h);
         if (stem != null) {
             int off = UC.REST_AUG_DOT_OFF_SET, sp = UC.AUG_DOT_SPACING;
@@ -83,11 +102,20 @@ public class Head extends Mass implements Comparable<Head> {
         }
     }
 
+    public void deleteHead() {
+        unStem();
+        time.removeHead(this);
+        deleteMass();
+    }
+
     public void unStem() {
         if (stem != null) {
             stem.heads.remove(this);
-            if (stem.heads.size() > 0) {
+            if (stem.heads.size() ==0) {
                 stem.deleteStem();
+            } else {
+                System.out.println("here----------------------");
+                stem.setWrongSize();
             }
             stem = null;
             wrongSide = false;
@@ -115,8 +143,6 @@ public class Head extends Mass implements Comparable<Head> {
         }
         return res;
     }
-    public void deleteMass() { time.heads.remove(this); } // This is a stub
-
     public int w() {
         return 24 * staff.H() / 10;
     }

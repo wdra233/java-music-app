@@ -86,7 +86,7 @@ public class Stem extends Duration implements Comparable<Stem> {
 
     public static int bidLineCrossStem(int y, int x1, int x2, Stem stem) {
         if (stem.heads.size() > 0) {
-            int xs = stem.heads.get(0).time.x;
+            int xs = stem.x();
             if (x1 > xs || x2 < xs) {
                 return UC.NO_BID;
             }
@@ -117,9 +117,23 @@ public class Stem extends Duration implements Comparable<Stem> {
     public Head firstHead() { return heads.get(isUp ? heads.size() - 1 : 0); }
     public Head lastHead() { return heads.get(isUp ? 0 : heads.size() - 1); }
 
-    public int yFirstHead() { Head h = firstHead(); return h.staff.yLine(h.line); }
-    public int x() { Head h = firstHead(); return h.time.x +( isUp ? h.w() : 0 ); }
+    public int yFirstHead() {
+        if (heads.size() == 0) {
+            return 200;
+        }
+        Head h = firstHead();
+        return h.staff.yLine(h.line);
+    }
+    public int x() {
+        if (heads.size() == 0) {
+            return 100;
+        }
+        Head h = firstHead(); return h.time.x +( isUp ? h.w() : 0 );
+    }
     public int yBeamEnd() {
+        if (heads.size() == 0) {
+            return 100;
+        }
         if(this.beam != null && beam.stems.size() > 1 && beam.first() != this && beam.last() != this) {
             Stem b = beam.first(), e = beam.last();
             return Beam.yOfX(x(), b.x(), b.yBeamEnd(), e.x(), e.yBeamEnd());
@@ -145,6 +159,14 @@ public class Stem extends Duration implements Comparable<Stem> {
     }
 
     public void deleteStem() {
+        if (heads.size() != 0) {
+            System.out.println("ERROR--DELETING STEM WITH HEADS");
+            return;
+        }
+        staff.sys.stems.remove(this);
+        if (beam != null) {
+            beam.removeStem(this);
+        }
         deleteMass();
     }
 

@@ -37,6 +37,15 @@ public class Beam extends Mass {
         }
     }
 
+    public void removeStem(Stem s) {
+        if (s == first() || s == last()) {
+            deleteBeam();
+        } else {
+            stems.remove(s);
+            stems.sort();
+        }
+    }
+
     public static int yOfX(int x, int x1, int y1, int x2, int y2) {
         int dY = y2 - y1, dX = x2 - x1;
         return (x - x1) * dY / dX + y1;

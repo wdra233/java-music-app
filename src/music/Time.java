@@ -18,6 +18,13 @@ public class Time {
         }
     }
 
+    public void removeHead(Head h) {
+        heads.remove(h);
+        if (heads.size() == 0) {
+            h.staff.sys.times.remove(this);
+        }
+    }
+
 //    public void stemHead(Staff staff, boolean up, int y1, int y2) {
 //        Stem s = new Stem(staff, up);
 //        for (Head h : heads) {
